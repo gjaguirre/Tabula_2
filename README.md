@@ -115,4 +115,25 @@ Si quieres que actualice `requirements.txt` para incluir `bcrypt`, indícamelo y
 
 ---
 
+**Uso de Rich (interfaz mejorada)**
+
+La versión actual del CLI utiliza `rich` para presentar una interfaz más profesional.
+
+- `rich` ya está listado en `requirements.txt`.
+- Para ver la UI correctamente necesitas ejecutar el CLI en una terminal que soporte ANSI (Windows Terminal, PowerShell 7+, cmd.exe con Windows 10+, o WSL). Recomendado: Windows Terminal o PowerShell 7.
+
+Comandos de ejemplo:
+```powershell
+# activar entorno (PowerShell)
+.\.venv\Scripts\Activate.ps1
+# ejecutar CLI con Rich
+python main.py
+```
+
+Consideraciones:
+- `rich` dibuja paneles y tablas en TTY; si ejecutas el script mediante redirección de stdin (p. ej. `python main.py < inputs.txt`) algunas características visuales y la lectura de contraseñas pueden no comportarse igual. Usa `run_cli_sim.py` para simulaciones no interactivas.
+- Si al ejecutar `python main.py` te aparece `ModuleNotFoundError: No module named 'rich'`, asegúrate de instalar `rich` en el intérprete que estés usando (ver sección Dependencias importantes).
+
+Si quieres, puedo añadir una imagen de ejemplo o instrucciones específicas para configurar Windows Terminal.
+
 Si deseas, puedo añadir un workflow de GitHub Actions que ejecute `pytest` en cada push y/o añadir `bcrypt` a `requirements.txt` y hacer commit.
