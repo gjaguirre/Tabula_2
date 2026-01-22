@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Any
 
 from usuarios import Usuario
 from tareas import Tarea
@@ -185,6 +185,43 @@ class GestorTareas:
         for tarea in self.tareas.values():
             print("-" * 40)
             print(tarea.obtener_info_detallada())
+
+    # ==================================================
+    # Métodos adicionales de utilidad
+    # ==================================================
+
+    def existe_admin(self) -> bool:
+        """Devuelve True si existe al menos un usuario con rol admin."""
+        return any(u.es_admin() for u in self.usuarios.values())
+
+    def listar_usuarios(self) -> List[Dict[str, Any]]:
+        """Devuelve una lista de diccionarios con los usuarios."""
+        return [u.to_dict() for u in self.usuarios.values()]
+
+    def obtener_tareas_usuario(self, nombre_usuario: str) -> List[Tarea]:
+        """Devuelve la lista de tareas asignadas al usuario indicado."""
+        usuario = self.usuarios.get(nombre_usuario)
+        if not usuario:
+            raise ValueError("Usuario inexistente.")
+
+        return [t for t in self.tareas.values() if usuario in t.usuarios_asignados]
+
+    def agregar_comentario_tarea(self, nombre_tarea: str, texto: str, nombre_autor: str) -> None:
+        """Agrega un comentario a una tarea identificando al autor por nombre."""
+        tarea = self.tareas.get(nombre_tarea)
+        if not tarea:
+            raise ValueError("Tarea inexistente.")
+
+        autor = self.usuarios.get(nombre_autor)
+        if not autor:
+            raise ValueError("Usuario inexistente.")
+
+        tarea.agregar_comentario(texto, autor)
+        self._guardar_todo()
+
+    def ver_estadisticas(self) -> Dict[str, int]:
+        """Devuelve estadísticas básicas de las tareas."""
+        return utils.calcular_estadisticas_tareas(list(self.tareas.values()))
 
 
 # ======================================================
